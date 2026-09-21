@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#150c2e" />
-<title>Happy Birthday, Jeetanshi</title>
+<title>Happy Birthday Jeetanshi</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -482,37 +482,89 @@
     .beaver-bubble{ font-size:.72rem; max-width:9rem; }
   }
 
-  /* ===================== MESSAGE ===================== */
-  .scene-message{
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    text-align:center;
-    padding:clamp(3.5rem,12vh,7rem) 1.5rem;
-    background:var(--sky-2); color:var(--sky-ink);
-    gap:1.1rem;
+  /* ===================== FINALE (birthday wish) ===================== */
+  .finale{
+    position:relative; isolation:isolate; overflow:hidden;
+    min-height:100svh; min-height:100vh;
+    display:flex; align-items:center; justify-content:center; text-align:center;
+    padding:clamp(4rem,12vh,7rem) 1.5rem;
+    color:#fff;
+    background:
+      radial-gradient(55% 42% at 50% 47%, rgba(176,107,255,.17), transparent 70%),
+      radial-gradient(34% 26% at 50% 50%, rgba(255,92,122,.11), transparent 72%),
+      linear-gradient(to bottom, #150c2e 0%, #0d0720 55%, #080414 100%);
   }
-  .scene-message h2{
-    font-family:'Fredoka',sans-serif; font-weight:600;
-    font-size:clamp(1.7rem, 4.6vw, 2.8rem);
-    margin:0; line-height:1.15;
+  /* the fun cursor for this page only (set from JS as --finale-cursor) */
+  .finale, .finale *{ cursor:var(--finale-cursor, auto); }
+  .finale::before{                               /* slow breathing glow behind the title */
+    content:''; position:absolute; z-index:0; left:50%; top:47%;
+    width:min(92vw,760px); aspect-ratio:1.6; translate:-50% -50%;
+    background:radial-gradient(closest-side, rgba(255,165,82,.13), rgba(255,92,122,.06) 55%, transparent 100%);
+    filter:blur(6px); pointer-events:none;
+    animation:fGlow 6s ease-in-out infinite;
   }
-  .scene-message p{
-    max-width:34ch;
-    font-size:clamp(1rem, 2.3vw, 1.18rem);
-    line-height:1.7; margin:0; color:var(--sky-mute);
+  @keyframes fGlow{ 0%,100%{ scale:.94; opacity:.75; } 50%{ scale:1.06; opacity:1; } }
+  /* pointer light: a wide, soft warm wash blended OVER the page (text + sky), no hot spot.
+     JS moves it with transform and drives its opacity. The canvas also brightens
+     nearby stars and reveals hidden dust stars inside the same radius. */
+  .cursor-glow{
+    --gs:clamp(190px, 30vmin, 320px);
+    position:absolute; left:0; top:0; z-index:2;
+    width:var(--gs); height:var(--gs);
+    margin:calc(var(--gs) / -2) 0 0 calc(var(--gs) / -2);
+    border-radius:50%; pointer-events:none;
+    background:radial-gradient(circle closest-side,
+      rgba(255,206,160,.20) 0%, rgba(255,176,190,.16) 32%,
+      rgba(190,140,255,.08) 64%, transparent 100%);
+    mix-blend-mode:screen;
+    opacity:0; will-change:transform, opacity;
   }
-  #wishBtn{
-    margin-top:.5rem; padding:.95em 2em;
-    font-family:'Quicksand',sans-serif; font-weight:700; font-size:1rem;
-    border:none; border-radius:999px; cursor:pointer; color:#fff;
-    background:linear-gradient(100deg, var(--pink), var(--purple));
-    box-shadow:0 10px 26px rgba(176,107,255,.34);
-    transition:transform .18s cubic-bezier(.34,1.56,.64,1), box-shadow .18s ease;
-  }
-  #wishBtn:hover{ transform:translateY(-3px); box-shadow:0 16px 32px rgba(176,107,255,.42); }
-  #wishBtn:active{ transform:translateY(-1px) scale(.98); }
-  #wishBtn:focus-visible{ outline:3px solid var(--purple); outline-offset:3px; }
+  #finaleFx{ position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; display:block; }
 
-  footer{ text-align:center; padding:1.6rem; font-size:.8rem; color:#9a8aa8; background:var(--sky-2); }
+  .finale-inner{
+    position:relative; z-index:1;
+    display:flex; flex-direction:column; align-items:center; gap:1.15rem;
+    max-width:44rem;
+  }
+  .finale-title{
+    margin:0; font-family:'Fredoka',sans-serif; font-weight:600;
+    font-size:clamp(2.3rem,8.2vw,5rem); line-height:1.08; letter-spacing:-.01em;
+    text-wrap:balance;
+  }
+  .finale-title .word{ display:inline-block; white-space:nowrap; }
+  .finale-title .l{ display:inline-block; animation:fWave 3.4s ease-in-out infinite; animation-delay:calc(var(--i) * -.16s); }
+  .finale-title .li{
+    display:inline-block; color:#fff;
+    transition:color 1.4s ease, text-shadow 1.4s ease;
+  }
+  .finale-title .li.hop{
+    animation:fHop .62s cubic-bezier(.34,1.56,.64,1);
+    text-shadow:0 0 .55em currentColor; transition:none;
+  }
+  @keyframes fWave{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-.06em); } }
+  @keyframes fHop{
+    0%  { translate:0 0;      rotate:0deg;   scale:1;   }
+    35% { translate:0 -.34em; rotate:-11deg; scale:1.28; }
+    68% { translate:0 .04em;  rotate:6deg;   scale:.94; }
+    100%{ translate:0 0;      rotate:0deg;   scale:1;   }
+  }
+  .finale-msg{
+    margin:0; max-width:34ch;
+    font-size:clamp(1rem,2.3vw,1.2rem); line-height:1.75;
+    color:rgba(255,255,255,.78);
+  }
+  /* gentle rise-in when the page scrolls into view */
+  .js .finale .fx-rise{
+    opacity:0; translate:0 20px;
+    transition:opacity .7s ease var(--d,0s), translate .7s cubic-bezier(.2,.8,.2,1) var(--d,0s);
+  }
+  .js .finale.in .fx-rise{ opacity:1; translate:0 0; }
+  footer{ text-align:center; padding:1.6rem; font-size:.8rem; color:rgba(255,255,255,.38); background:#080414; }
+
+  @media (prefers-reduced-motion: reduce){
+    .finale::before, .finale-title .l{ animation:none !important; }
+    .js .finale .fx-rise{ opacity:1; translate:0 0; transition:none !important; }
+  }
 
   @media (prefers-reduced-motion: reduce){
     *, *::before, *::after{
@@ -555,7 +607,7 @@
   </div>
 
   <p class="name-static">JEETANSHI</p>
-  <span class="sr-only">Happy Birthday, Jeetanshi</span>
+  <span class="sr-only">Happy Birthday Jeetanshi</span>
 
   <div class="burst" id="burst" aria-hidden="true"></div>
   <a class="scroll-hint" id="scrollHint" href="#cakeScene">
@@ -611,10 +663,14 @@
   </div>
 </section>
 
-<section class="scene-message">
-  <h2>Happy Birthday, Jeetanshi</h2>
-  <p>Wishing you a year as bright, joyful and wonderful as you are. Hope today is filled with all your favourite things, and this year brings you every bit of magic you deserve.</p>
-  <button id="wishBtn">Make a wish</button>
+<section class="finale" id="finale">
+  <div class="cursor-glow" id="finaleGlow" aria-hidden="true"></div>
+  <canvas id="finaleFx" aria-hidden="true"></canvas>
+  <div class="finale-inner">
+    <!-- ✎ EDIT THE WORDS HERE — title and message are plain text -->
+    <h2 class="finale-title fx-rise" id="finaleTitle" style="--d:.12s">Happy Birthday Jeetanshi</h2>
+    <p class="finale-msg fx-rise" style="--d:.26s">sooo ahum hope you liked upar wala sab kuch i had fun making it so ye matt puchna ki kitna time laga anyways aaj to aapka birthday hai i hope aapka aajka din bohot accha jaaye i mean i hope aapke saare din hi acche jaaye but yk aaj ka din jyada accha jaaye aur aaj acche se enjoy karna eat dance bahar ghoomo jo karna hai vo karo aaj to sab kuch khaa jao be a proud khaoodi</p>
+  </div>
 </section>
 
 <footer>made with care, just for you</footer>
@@ -6177,8 +6233,10 @@ if (window.THREE){
       say(figR, 'thank you omg', 2.2);
     }
     var DARK_FIRST = 8, DARK_AGAIN = 4, COMFY_AT = 4;   /* seconds of darkness before the note / after "yas" / before his remark */
+    var darkAsks = 0;                       /* how many times the dark question has been shown */
     function startBlackout(){
       bubbles.length = 0;
+      darkAsks = 0;
       inter = 'toswitch';
       wallSw.lever = -1;
       gsap.to(wallSw, { a: 1, duration: .55, ease: 'back.out(1.6)' });
@@ -6206,13 +6264,20 @@ if (window.THREE){
       gsap.delayedCall(DARK_FIRST, showAsk2);
     }
     function showAsk2(){
+      darkAsks++;
       inter = 'ask2';
-      askShow('abhi bhi <u>ghoorogi</u> hume?', 'yas', 'nahi sorry', answerYasInDark, answerSorry);
+      askShow(darkAsks >= 2 ? 'ABHI BHI <u>GHOOROGI</u> HUME?' : 'abhi bhi <u>ghoorogi</u> hume?',
+              'yas', 'nahi sorry', answerYasInDark, answerSorry);
     }
     function answerYasInDark(){              /* stays black, asks again in 4s */
       inter = 'dark';
       say(figR, 'theeke', 2.2);
-      gsap.delayedCall(DARK_AGAIN, showAsk2);
+      var extra = 0;
+      if (darkAsks >= 2){                   /* third question onward: the left one snaps 2s after "theeke" */
+        extra = 2;
+        gsap.delayedCall(2, function(){ say(figL, 'JAO NA KYA DIKKAT HAI', 2.6); });
+      }
+      gsap.delayedCall(DARK_AGAIN + extra, showAsk2);   /* next question shifts by the extra 2s */
     }
     function answerSorry(){                  /* lights back on */
       inter = 'sorry';
@@ -6229,6 +6294,7 @@ if (window.THREE){
       });
     }
     function afterLightsOn(){
+      say(figR, 'thank you omg', 2.6);       /* relieved, once the lights are back on */
       gsap.to(figR, { gestureAmt: 0, duration: .35, ease: 'power2.in' });
       gsap.to(wallSw, { a: 0, duration: .5, delay: .6, ease: 'power2.in' });
       gsap.delayedCall(.5, function(){
@@ -6488,7 +6554,9 @@ if (window.THREE){
     var TABLE_R   = 6.0;
     var SEAT_TOP  = -0.55;
     /* the cake now sits straight on the tabletop — no cake stand */
-    var cakeBaseY = TABLE_TOP + 0.03, cakeTop = cakeBaseY + H;
+    var STAND_H = 0.46;                                   /* cake now rides on a pedestal stand */
+    var STAND_R = R + 0.36;                               /* radius of the stand's top plate */
+    var cakeBaseY = TABLE_TOP + 0.03 + STAND_H, cakeTop = cakeBaseY + H;
     var plateTop = 0.19;
     var PLATE_SLOTS = 5;
     /* the beaver now stands ON the table (same x/z spot as before) and is small */
@@ -6502,9 +6570,9 @@ if (window.THREE){
       if (aspect < 1.25){
         LAYOUT = {
           eye:   { x:0.00, y:4.40, z:12.50 },
-          look:  { x:0.00, y:1.50, z:0.00 },
+          look:  { x:0.00, y:1.72, z:0.00 },
           cake:  { x:0.00,  z:0.00 },
-          plate: { x:1.50,  z:2.20 },
+          plate: { x:-1.70, z:3.55 },
           beaver:{ x:2.40,  z:4.20 },
           cat:   { x:0.00,  z:-5.50 },
           dog:   { x:-6.20, z:1.20 },
@@ -6515,9 +6583,9 @@ if (window.THREE){
       } else {
         LAYOUT = {
           eye:   { x:0.00, y:4.60, z:9.80 },
-          look:  { x:0.00, y:1.50, z:0.00 },
+          look:  { x:0.00, y:1.72, z:0.00 },
           cake:  { x:0.00,  z:0.00 },
-          plate: { x:1.40,  z:1.90 },
+          plate: { x:-1.90, z:3.35 },
           beaver:{ x:2.90,  z:3.20 },
           cat:   { x:0.00,  z:-6.50 },
           dog:   { x:-6.60, z:1.40 },
@@ -6585,32 +6653,26 @@ if (window.THREE){
     function std(c, r, m){ return new THREE.MeshStandardMaterial({ color:c, roughness:r, metalness:m || 0 }); }
     function seeded(i){ var x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); }
 
-    var spongeTex = (function(){
-      var c = document.createElement('canvas'); c.width = c.height = 256;
-      var g = c.getContext('2d');
-      g.fillStyle = '#d69a4e'; g.fillRect(0, 0, 256, 256);
-      for (var i = 0; i < 950; i++){
-        var s = Math.random() * 2.6 + 0.7;
-        g.fillStyle = Math.random() < 0.5
-          ? 'rgba(118,72,22,' + (Math.random() * 0.22 + 0.07).toFixed(3) + ')'
-          : 'rgba(255,226,168,' + (Math.random() * 0.20 + 0.06).toFixed(3) + ')';
-        g.beginPath(); g.arc(Math.random() * 256, Math.random() * 256, s, 0, TAU); g.fill();
-      }
-      var t = new THREE.CanvasTexture(c);
-      t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(0.55, 0.55);
-      return t;
-    })();
-    var spongeMats = LAYERS.map(function(l, i){
+    /* ---- procedural, tileable crumb / cream textures (colour + bump) ---- */
+    function wrapDraw(S, r, x, y, fn){
+      var xs = [0], ys = [0];
+      if (x < r) xs.push(S); if (x > S - r) xs.push(-S);
+      if (y < r) ys.push(S); if (y > S - r) ys.push(-S);
+      for (var i = 0; i < xs.length; i++) for (var j = 0; j < ys.length; j++) fn(x + xs[i], y + ys[j]);
+    }
+    function ell(g, x, y, rx, ry, rot, fill){
+      g.save(); g.translate(x, y); g.rotate(rot); g.scale(1, ry / rx);
+      g.fillStyle = fill; g.beginPath(); g.arc(0, 0, rx, 0, TAU); g.fill(); g.restore();
+    }
+    var spongeMats = LAYERS.map(function(l){
       if (l.t !== 'sponge') return null;
-      var t = spongeTex.clone(); t.needsUpdate = true;
-      t.offset.set(seeded(i) * 0.8, seeded(i + 9) * 0.8);
-      return new THREE.MeshStandardMaterial({ map: t, roughness: 0.95 });
+      return new THREE.MeshStandardMaterial({ color: 0xd69a4e, roughness: 0.95 });
     });
     var glazeMat = (function(){
       var c = document.createElement('canvas'); c.width = c.height = 256;
       var g = c.getContext('2d');
       var grad = g.createLinearGradient(0, 0, 0, 256);
-      grad.addColorStop(0, '#c67a24'); grad.addColorStop(0.5, '#b06a1c'); grad.addColorStop(1, '#c47d28');
+      grad.addColorStop(0, '#c8791f'); grad.addColorStop(0.5, '#a95f16'); grad.addColorStop(1, '#c47d28');
       g.fillStyle = grad; g.fillRect(0, 0, 256, 256);
       for (var i = 0; i < 46; i++){
         var x = Math.random() * 256, w = Math.random() * 7 + 1.5;
@@ -6621,13 +6683,20 @@ if (window.THREE){
       }
       var t = new THREE.CanvasTexture(c);
       t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(2, 0.6);
-      return new THREE.MeshStandardMaterial({ map: t, roughness: 0.16, metalness: 0.08 });
+      return new THREE.MeshPhysicalMaterial({ map: t, roughness: 0.3, metalness: 0.04,
+        clearcoat: 1, clearcoatRoughness: 0.1, emissive: 0x2a1000, emissiveIntensity: 0.35 });
     })();
 
     var creamMat   = std(0xf2c989, 0.9);
+    var creamPipeMat = new THREE.MeshStandardMaterial({ color: 0xfff1d4, roughness: 0.62 });
+    var cherryMat  = new THREE.MeshPhysicalMaterial({ color: 0xc8102e, roughness: 0.28, clearcoat: 1, clearcoatRoughness: 0.08 });
+    var amberMat   = new THREE.MeshPhysicalMaterial({ color: 0xe08a1e, roughness: 0.14, clearcoat: 1, clearcoatRoughness: 0.05, emissive: 0x4a2000, emissiveIntensity: 0.55 });
+    var toffeeMat  = std(0xb87428, 0.7);
+    var pearlMat   = new THREE.MeshStandardMaterial({ color: 0xf0c65a, roughness: 0.3, metalness: 0.55, emissive: 0x3a2a08, emissiveIntensity: 0.6 });
+    var drizzleMat = new THREE.MeshPhysicalMaterial({ color: 0xd6841c, roughness: 0.12, clearcoat: 1, clearcoatRoughness: 0.05, emissive: 0x3a1a00, emissiveIntensity: 0.4 });
     var cherryMat  = std(0xd6335a, 0.12);
     var stemMat    = std(0x4a7a3a, 0.8);
-    var curlMat    = std(0xa9641f, 0.5);
+    var curlMat    = new THREE.MeshPhysicalMaterial({ color: 0xa9641f, roughness: 0.32, clearcoat: 0.8, clearcoatRoughness: 0.15 });
     var chipMat    = std(0xeab86b, 0.6);
     var rosMat     = std(0xfff3dd, 0.85);
     var shardMat   = std(0x8f5319, 0.45);
@@ -6670,14 +6739,49 @@ if (window.THREE){
       addMesh(new THREE.CylinderGeometry(5.5, 5.5, 0.025, 64), std(0xf8ecdc, 0.9), 0, TABLE_TOP + 0.012, 0, false, true);
     })();
 
+    /* ---- pedestal cake stand: the cake now sits higher, on a porcelain stand ---- */
     (function(){
       var g = new THREE.Group();
-      var base = new THREE.Mesh(new THREE.CylinderGeometry(1.0, 1.05, 0.06, 40), std(0xf6ecdd, 0.35));
-      var rim = new THREE.Mesh(new THREE.TorusGeometry(0.98, 0.035, 8, 40), std(0xf6ecdd, 0.35));
-      rim.rotation.x = Math.PI / 2; rim.position.y = 0.05;
-      base.castShadow = rim.castShadow = true;
-      g.add(base); g.add(rim);
-      g.position.set(PLATE.x, TABLE_TOP + 0.045, PLATE.z);
+      var y0 = TABLE_TOP + 0.022;
+      var plateBot = cakeBaseY - 0.075;
+      var porcelain = new THREE.MeshPhysicalMaterial({ color: 0xfff6e6, roughness: 0.32, clearcoat: 0.6, clearcoatRoughness: 0.2 });
+      var footPts = [
+        [0, y0], [1.25, y0], [1.27, y0 + 0.035], [1.18, y0 + 0.07], [0.9, y0 + 0.09],
+        [0.52, y0 + 0.13], [0.34, y0 + 0.19], [0.27, y0 + 0.26],
+        [0.25, plateBot - 0.16], [0.30, plateBot - 0.10], [0.46, plateBot - 0.04], [0.8, plateBot], [0, plateBot]
+      ].map(function(p){ return new THREE.Vector2(p[0], p[1]); });
+      var foot = new THREE.Mesh(new THREE.LatheGeometry(footPts, 56), porcelain);
+      foot.castShadow = foot.receiveShadow = true; g.add(foot);
+      var knob = new THREE.Mesh(new THREE.TorusGeometry(0.29, 0.05, 10, 32), goldMat);
+      knob.rotation.x = Math.PI / 2; knob.position.y = y0 + 0.30; g.add(knob);
+      var knob2 = knob.clone(); knob2.position.y = plateBot - 0.14; g.add(knob2);
+      var top = new THREE.Mesh(new THREE.CylinderGeometry(STAND_R, STAND_R - 0.16, 0.075, 64), porcelain);
+      top.position.y = plateBot + 0.0375; top.castShadow = top.receiveShadow = true; g.add(top);
+      var trim = new THREE.Mesh(new THREE.TorusGeometry(STAND_R - 0.005, 0.028, 8, 72), goldMat);
+      trim.rotation.x = Math.PI / 2; trim.position.y = plateBot + 0.072; g.add(trim);
+      var footTrim = new THREE.Mesh(new THREE.TorusGeometry(1.22, 0.022, 8, 48), goldMat);
+      footTrim.rotation.x = Math.PI / 2; footTrim.position.y = y0 + 0.045; g.add(footTrim);
+      /* thin gold cake board the cake actually rests on */
+      var board = new THREE.Mesh(new THREE.CylinderGeometry(R + 0.16, R + 0.16, 0.02, 64), std(0xe9c56a, 0.3, 0.5));
+      board.position.y = cakeBaseY - 0.004; board.receiveShadow = true; g.add(board);
+      g.position.set(CK.x, 0, CK.z);
+      scene.add(g);
+    })();
+
+    /* ---- serving plate, moved to the front of the table ---- */
+    (function(){
+      var g = new THREE.Group();
+      var dishMat = new THREE.MeshPhysicalMaterial({ color: 0xfaf1e2, roughness: 0.3, clearcoat: 0.6, clearcoatRoughness: 0.2 });
+      var pts = [
+        [0, 0], [0.7, 0], [1.0, 0.05], [1.07, 0.11], [1.03, 0.12], [0.97, 0.085], [0.72, 0.055], [0, 0.055]
+      ].map(function(p){ return new THREE.Vector2(p[0], p[1]); });
+      var dish = new THREE.Mesh(new THREE.LatheGeometry(pts, 48), dishMat);
+      dish.castShadow = dish.receiveShadow = true; g.add(dish);
+      var rim = new THREE.Mesh(new THREE.TorusGeometry(1.05, 0.016, 8, 56), goldMat);
+      rim.rotation.x = Math.PI / 2; rim.position.y = 0.118; g.add(rim);
+      var ring = new THREE.Mesh(new THREE.TorusGeometry(0.74, 0.008, 6, 48), goldMat);
+      ring.rotation.x = Math.PI / 2; ring.position.y = 0.058; g.add(ring);
+      g.position.set(PLATE.x, TABLE_TOP + 0.02, PLATE.z);
       scene.add(g);
     })();
 
@@ -6731,8 +6835,8 @@ if (window.THREE){
       if (seeded(dk * 2 + 1) < 0.6){
         DRIPS.push({
           ang: dk * TAU / 60,
-          len: 0.16 + seeded(dk * 3 + 7) * 0.38,
-          r:   0.045 + seeded(dk * 5 + 11) * 0.032
+          len: 0.12 + Math.pow(seeded(dk * 3 + 7), 1.6) * 0.56,
+          r:   0.04 + seeded(dk * 5 + 11) * 0.034
         });
       }
     }
@@ -6772,16 +6876,28 @@ if (window.THREE){
         gm.castShadow = gm.receiveShadow = true;
         g.add(gm);
       }
+      var pg = layerGeometry(arcs, R - 0.07, 0.016);      /* glossy pooled ganache on top */
+      if (pg){
+        var pm = new THREE.Mesh(pg, glazeMat);
+        pm.position.y = y + GANACHE_H - 0.002;
+        pm.receiveShadow = true;
+        g.add(pm);
+      }
       for (var di = 0; di < DRIPS.length; di++){
         var d = DRIPS[di];
         if (!arcsContain(arcs, d.ang)) continue;
         var cx = Math.cos(d.ang) * (R + 0.02), cz = Math.sin(d.ang) * (R + 0.02);
-        var dc = new THREE.Mesh(new THREE.CylinderGeometry(d.r, d.r * 0.55, d.len, 10), glazeMat);
+        var dc = new THREE.Mesh(new THREE.CylinderGeometry(d.r * 1.05, d.r * 0.6, d.len, 12), glazeMat);
         dc.position.set(cx, y - d.len / 2 + 0.03, cz);
         dc.castShadow = true;
         g.add(dc);
-        var drop = new THREE.Mesh(new THREE.SphereGeometry(d.r * 1.02, 10, 8), glazeMat);
-        drop.position.set(cx, y - d.len - d.r * 0.25, cz);
+        var blob = new THREE.Mesh(new THREE.SphereGeometry(d.r * 1.7, 12, 8), glazeMat);   /* smooth blend into the rim */
+        blob.scale.set(1.15, 0.5, 1.0);
+        blob.position.set(cx, y + 0.005, cz);
+        g.add(blob);
+        var drop = new THREE.Mesh(new THREE.SphereGeometry(d.r * 0.98, 12, 10), glazeMat);
+        drop.scale.set(1, 1.25, 1);
+        drop.position.set(cx, y - d.len - d.r * 0.15, cz);
         g.add(drop);
       }
       return g;
@@ -6808,53 +6924,100 @@ if (window.THREE){
     function makeDecorations(){
       clearDecorations();
       var i, a, r, grp;
-      for (i = 0; i < 7; i++){
-        a = Math.random() * TAU; r = R * (0.3 + Math.random() * 0.42);
+      function addCherry(gp, y, sc){
+        sc = sc || 1;
+        var ch = new THREE.Mesh(new THREE.SphereGeometry(0.15 * sc, 22, 18), cherryMat);
+        ch.scale.set(1, 0.9, 1); ch.position.y = y + 0.125 * sc; ch.castShadow = true;
+        gp.add(ch);
+        var dim = new THREE.Mesh(new THREE.SphereGeometry(0.04 * sc, 8, 8), std(0x7a0a1e, 0.6));
+        dim.scale.set(1, 0.45, 1); dim.position.y = y + 0.255 * sc; gp.add(dim);
+        var curve = new THREE.CatmullRomCurve3([
+          new THREE.Vector3(0, 0, 0), new THREE.Vector3(0.012, 0.09, 0),
+          new THREE.Vector3(0.05, 0.17, 0.01), new THREE.Vector3(0.11, 0.205, 0)]);
+        var st = new THREE.Mesh(new THREE.TubeGeometry(curve, 12, 0.0105 * sc, 6, false), stemMat);
+        st.position.y = y + 0.245 * sc; st.scale.setScalar(sc); st.castShadow = true;
+        gp.add(st);
+      }
+      /* piped whipped-cream rosettes ringing the top edge (a cherry on every 4th) */
+      var NROS = 20;
+      for (i = 0; i < NROS; i++){
+        a = i * TAU / NROS + 0.05; r = R - 0.24;
         grp = new THREE.Group();
-        var ch = new THREE.Mesh(new THREE.SphereGeometry(0.15, 14, 12), cherryMat);
-        ch.position.y = H + 0.12; ch.castShadow = true;
-        var st = new THREE.Mesh(new THREE.CylinderGeometry(0.013, 0.013, 0.17, 6), stemMat);
-        st.position.set(0.02, H + 0.26, 0); st.rotation.z = 0.25;
-        grp.add(ch); grp.add(st);
+        [[0.03, 0.125, 0.052], [0.078, 0.09, 0.046], [0.118, 0.056, 0.04]].forEach(function(p){
+          var tr = new THREE.Mesh(new THREE.TorusGeometry(p[1], p[2], 8, 22), creamPipeMat);
+          tr.rotation.x = Math.PI / 2; tr.position.y = H + p[0]; tr.castShadow = true;
+          grp.add(tr);
+        });
+        var tip = new THREE.Mesh(new THREE.ConeGeometry(0.05, 0.11, 10), creamPipeMat);
+        tip.position.set(0.01, H + 0.19, 0); tip.rotation.z = -0.25; tip.castShadow = true;
+        grp.add(tip);
+        if (i % 4 === 0) addCherry(grp, H + 0.2, 0.78);
+        decor(grp, a, r, 'rosette');
+      }
+      for (i = 0; i < 3; i++){
+        a = Math.random() * TAU; r = R * (0.62 + Math.random() * 0.12);
+        grp = new THREE.Group();
+        addCherry(grp, H, 1);
         decor(grp, a, r, 'cherry');
       }
       for (i = 0; i < 6; i++){
         a = Math.random() * TAU; r = R * (0.25 + Math.random() * 0.5);
         grp = new THREE.Group();
-        var cu = new THREE.Mesh(new THREE.TorusGeometry(0.1, 0.033, 8, 14, 4.4), curlMat);
+        var cu = new THREE.Mesh(new THREE.TorusGeometry(0.1, 0.033, 8, 16, 4.4), curlMat);
         cu.rotation.set(Math.random() * 3, Math.random() * 3, Math.random() * 3);
         cu.position.y = H + 0.035; cu.castShadow = true;
         grp.add(cu);
         decor(grp, a, r, 'curl');
       }
-      for (i = 0; i < 8; i++){
+      /* butterscotch hard-candy pieces */
+      for (i = 0; i < 9; i++){
         a = Math.random() * TAU; r = R * (0.3 + Math.random() * 0.55);
         grp = new THREE.Group();
-        var cp = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.1, 6), chipMat);
+        var cp = new THREE.Mesh(new THREE.IcosahedronGeometry(0.065 + Math.random() * 0.03, 0), amberMat);
+        cp.scale.set(1, 0.62, 1.2);
         cp.rotation.set(Math.random() * 3, Math.random() * 3, Math.random() * 3);
-        cp.position.y = H + 0.05; cp.castShadow = true;
+        cp.position.y = H + 0.04; cp.castShadow = true;
         grp.add(cp);
         decor(grp, a, r, 'chip');
       }
-      for (i = 0; i < 5; i++){
-        a = Math.random() * TAU; r = R * 0.92;
-        grp = new THREE.Group();
-        var r1 = new THREE.Mesh(new THREE.SphereGeometry(0.095, 12, 10), rosMat);
-        r1.position.y = H + 0.075; r1.scale.y = 0.8;
-        var r2 = new THREE.Mesh(new THREE.SphereGeometry(0.065, 12, 10), rosMat);
-        r2.position.y = H + 0.16; r2.scale.y = 0.85;
-        r1.castShadow = r2.castShadow = true;
-        grp.add(r1); grp.add(r2);
-        decor(grp, a, r, 'rosette');
-      }
+      /* brittle slabs */
       for (i = 0; i < 4; i++){
         a = Math.random() * TAU; r = R * (0.35 + Math.random() * 0.4);
         grp = new THREE.Group();
-        var sd = new THREE.Mesh(new THREE.TetrahedronGeometry(0.09), shardMat);
-        sd.rotation.set(Math.random() * 3, Math.random() * 3, Math.random() * 3);
-        sd.position.y = H + 0.05; sd.castShadow = true;
+        var sd = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.03, 0.15), amberMat);
+        sd.rotation.set((Math.random() - 0.5) * 0.7, Math.random() * 3, (Math.random() - 0.5) * 0.7);
+        sd.position.y = H + 0.06; sd.castShadow = true;
         grp.add(sd);
         decor(grp, a, r, 'shard');
+      }
+      /* caramel drizzle arcs */
+      for (i = 0; i < 9; i++){
+        a = Math.random() * TAU; r = R * (0.2 + Math.random() * 0.6);
+        grp = new THREE.Group();
+        var dz = new THREE.Mesh(new THREE.TorusGeometry(0.16 + Math.random() * 0.14, 0.017, 6, 20, 2.2 + Math.random() * 1.4), drizzleMat);
+        dz.rotation.set(Math.PI / 2, 0, Math.random() * TAU);
+        dz.position.y = H + 0.022;
+        grp.add(dz);
+        decor(grp, a, r, 'drizzle');
+      }
+      /* toffee crumble */
+      for (i = 0; i < 20; i++){
+        a = Math.random() * TAU; r = R * (0.25 + Math.random() * 0.65);
+        grp = new THREE.Group();
+        var tb = new THREE.Mesh(new THREE.BoxGeometry(0.05 + Math.random() * 0.04, 0.03, 0.04 + Math.random() * 0.03), toffeeMat);
+        tb.rotation.set(Math.random(), Math.random() * 3, Math.random());
+        tb.position.y = H + 0.018;
+        grp.add(tb);
+        decor(grp, a, r, 'crumble');
+      }
+      /* gilded sugar pearls */
+      for (i = 0; i < 14; i++){
+        a = Math.random() * TAU; r = R * (0.3 + Math.random() * 0.55);
+        grp = new THREE.Group();
+        var pe = new THREE.Mesh(new THREE.SphereGeometry(0.032, 10, 8), pearlMat);
+        pe.position.y = H + 0.03; pe.castShadow = true;
+        grp.add(pe);
+        decor(grp, a, r, 'pearl');
       }
       var SPRK = [0xff7aa2, 0x7ac4ff, 0xffd93d, 0x8de0a0, 0xfff3dd];
       for (i = 0; i < 22; i++){
@@ -6868,14 +7031,28 @@ if (window.THREE){
         grp.add(sp);
         decor(grp, a, r, 'sprinkle');
       }
-      for (i = 0; i < 22; i++){
-        a = i * TAU / 22 + 0.06;
+      /* piped shell border around the base, each shell laid along the edge */
+      var NSH = 34;
+      for (i = 0; i < NSH; i++){
+        a = i * TAU / NSH + 0.04;
         grp = new THREE.Group();
-        var sh = new THREE.Mesh(new THREE.SphereGeometry(0.13, 12, 10), rosMat);
-        sh.scale.set(1.22, 0.72, 0.95);
-        sh.position.y = 0.075; sh.castShadow = true;
+        var sh = new THREE.Mesh(new THREE.SphereGeometry(0.1, 14, 10), creamPipeMat);
+        sh.scale.set(1.25, 0.72, 0.95);
+        sh.position.y = 0.07; sh.castShadow = true;
         grp.add(sh);
-        decor(grp, a, R + 0.01, 'shell');
+        var sh2 = new THREE.Mesh(new THREE.SphereGeometry(0.048, 10, 8), creamPipeMat);
+        sh2.scale.set(1.3, 0.7, 0.8);
+        sh2.position.set(0.11, 0.045, 0.02);
+        grp.add(sh2);
+        [-0.05, 0.0, 0.05].forEach(function(dx){
+          var ridge = new THREE.Mesh(new THREE.TorusGeometry(0.086, 0.007, 5, 12, 3.1), std(0xead6ad, 0.7));
+          ridge.rotation.set(0, Math.PI / 2, 0);
+          ridge.position.set(dx, 0.07, 0);
+          ridge.scale.set(1, 0.7, 1);
+          grp.add(ridge);
+        });
+        grp.rotation.y = -(a + Math.PI / 2);
+        decor(grp, a, R + 0.02, 'shell');
       }
       var baseA = Math.random() * TAU;
       for (i = 0; i < 3; i++){
@@ -7086,7 +7263,7 @@ if (window.THREE){
       g.add(bob);
       var white = std(0xf7f3ee, 0.92), cream = std(0xfffdf8, 0.92),
           grey = std(0xd9d4e2, 0.92), pink = std(0xf2a7b8, 0.55),
-          iris = std(0x6fc9b4, 0.25);
+          iris = std(0x6fc9b4, 0.45), eyeWhite = std(0xffffff, 0.4);
       sph(bob, 0.29, white, 0, 0.25, -0.02, 1, 0.9, 1.05);
       sph(bob, 0.25, white, 0, 0.60, 0.03, 1, 1.35, 0.88);
       sph(bob, 0.15, cream, 0, 0.56, 0.17, 0.95, 1.15, 0.6);
@@ -7119,9 +7296,12 @@ if (window.THREE){
         ear.add(tip);
         if (e[0] < 0) earL = ear; else earR = ear;
       });
+      [[-0.085], [0.085]].forEach(function(ex){
+        sph(head, 0.058, eyeWhite, ex[0], 0.03, 0.175, 1, 1, 0.9);
+      });
       var eyes = [
-        makeEye(head, -0.085, 0.03, 0.185, 0.052, iris, false),
-        makeEye(head,  0.085, 0.03, 0.185, 0.052, iris, false)
+        makeEye(head, -0.085, 0.03, 0.185, 0.044, iris, true),
+        makeEye(head,  0.085, 0.03, 0.185, 0.044, iris, true)
       ];
       [[-1, 0.08], [-1, -0.02], [1, 0.08], [1, -0.02]].forEach(function(w){
         var wh = new THREE.Mesh(new THREE.CylinderGeometry(0.004, 0.004, 0.2, 4), grey);
@@ -7176,7 +7356,7 @@ if (window.THREE){
       sph(bob, 0.075, white, -0.135, pawY, pawZ, 1, 0.7, 1.25);
       sph(bob, 0.075, white,  0.135, pawY, pawZ, 1, 0.7, 1.25);
       var tail = new THREE.Mesh(new THREE.TorusGeometry(0.12, 0.05, 8, 14, 3.6), goldD);
-      tail.position.set(0, 0.62, -0.12); tail.rotation.set(0.5, 0, 0);
+      tail.position.set(0, 0.66, -0.32); tail.rotation.set(0.5, 0, 0);
       tail.castShadow = true; bob.add(tail);
       sph(bob, 0.055, white, 0, 0.74, -0.2);
       head.position.y = 0.98; bob.add(head);
@@ -7320,6 +7500,7 @@ if (window.THREE){
     var sparkGeo = new THREE.BoxGeometry(0.06, 0.06, 0.02);
     var sparks = [];
     function groundYFor(x, z){
+      if (Math.hypot(x - CK.x, z - CK.z) < STAND_R - 0.1) return cakeBaseY + 0.01;   /* on the cake stand */
       return Math.hypot(x, z) < TABLE_R ? TABLE_TOP + 0.03 : FLOOR_Y + 0.04;
     }
     function burstSparks(p, n){
@@ -7602,32 +7783,90 @@ if (window.THREE){
     }
 
     var knifeCursorURL = '';
+    var KNIFE_HS = 8;                         /* hotspot = the blade tip, in cursor-image pixels */
     (function makeKnifeCursor(){
       try{
-        var cv2 = document.createElement('canvas'); cv2.width = 32; cv2.height = 32;
+        var SZ = 104;
+        var cv2 = document.createElement('canvas'); cv2.width = SZ; cv2.height = SZ;
         var g = cv2.getContext('2d');
-        g.translate(10.5, 10.5); g.rotate(Math.PI / 4);
-        var grad = g.createLinearGradient(0, -3.2, 0, 2.6);
-        grad.addColorStop(0, '#eef3f8'); grad.addColorStop(.55, '#c3cedb'); grad.addColorStop(1, '#8f9dad');
+        g.translate(KNIFE_HS, KNIFE_HS);       /* origin = the tip */
+        g.rotate(Math.PI / 4);
+        g.scale(1.12, 1.12);
+        g.lineJoin = 'round';
+
+        var L = 66;                            /* blade length */
+        function bladePath(){
+          g.beginPath();
+          g.moveTo(0, 0);
+          g.quadraticCurveTo(16, -5.2, L, -6.4);
+          g.lineTo(L, 7.2);
+          g.quadraticCurveTo(20, 4.6, 0, 0);
+          g.closePath();
+        }
+        /* soft drop shadow under the whole knife */
+        g.save();
+        g.shadowColor = 'rgba(0,0,0,.38)'; g.shadowBlur = 4; g.shadowOffsetX = 2; g.shadowOffsetY = 3;
+        g.fillStyle = '#9aa7b6'; bladePath(); g.fill();
+        g.restore();
+
+        /* blade: brushed steel, lighter along the spine, darker toward the edge */
+        var bg = g.createLinearGradient(0, -7, 0, 7.5);
+        bg.addColorStop(0,   '#f6f9fc');
+        bg.addColorStop(.35, '#d3dce6');
+        bg.addColorStop(.72, '#a9b5c3');
+        bg.addColorStop(1,   '#e4ebf2');
+        bladePath(); g.fillStyle = bg; g.fill();
+        g.lineWidth = 1; g.strokeStyle = '#3b4552'; g.stroke();
+
+        /* ground bevel toward the cutting edge */
         g.beginPath();
-        g.moveTo(-10.5, -0.2);
-        g.quadraticCurveTo(-4, -2.6, 2.2, -3.2);
-        g.lineTo(3.4, -3.2); g.lineTo(3.4, 2.6);
-        g.quadraticCurveTo(-3, -0.4, -10.5, 1.8);
-        g.closePath();
-        g.fillStyle = grad; g.fill();
-        g.lineWidth = 0.9; g.strokeStyle = '#39424d'; g.stroke();
-        g.beginPath(); g.moveTo(-9.4, 1.35); g.quadraticCurveTo(-3, -0.05, 3.2, 2.2);
-        g.strokeStyle = 'rgba(255,255,255,.85)'; g.lineWidth = 0.7; g.stroke();
-        var hg = g.createLinearGradient(0, -3, 0, 3);
-        hg.addColorStop(0, '#a06a3c'); hg.addColorStop(1, '#5c3a20');
+        g.moveTo(4, 1.3); g.quadraticCurveTo(22, 3.9, L, 6.2);
+        g.lineTo(L, 7.2); g.quadraticCurveTo(20, 4.6, 0, 0); g.closePath();
+        g.fillStyle = 'rgba(255,255,255,.55)'; g.fill();
+        /* long fuller groove */
+        g.beginPath(); g.moveTo(12, -2.6); g.quadraticCurveTo(34, -3.6, L - 3, -3.4);
+        g.strokeStyle = 'rgba(70,84,102,.55)'; g.lineWidth = 1; g.stroke();
+        /* bright spine highlight + glints */
+        g.beginPath(); g.moveTo(8, -2.8); g.quadraticCurveTo(30, -5.6, L - 2, -5.6);
+        g.strokeStyle = 'rgba(255,255,255,.95)'; g.lineWidth = .9; g.stroke();
+        g.lineCap = 'round'; g.strokeStyle = 'rgba(255,255,255,.9)'; g.lineWidth = 1.4;
+        g.beginPath(); g.moveTo(20, 1.2); g.lineTo(28, 2.3); g.stroke();
+        g.beginPath(); g.moveTo(40, 3.2); g.lineTo(46, 3.8); g.stroke();
+        g.lineCap = 'butt';
+
+        /* bolster (metal collar) */
+        var bo = g.createLinearGradient(0, -8, 0, 9);
+        bo.addColorStop(0, '#f1d488'); bo.addColorStop(.5, '#c9a24e'); bo.addColorStop(1, '#8c6a26');
         g.beginPath();
-        if (g.roundRect) g.roundRect(3.4, -2.9, 10.6, 5.8, 2.4); else g.rect(3.4, -2.9, 10.6, 5.8);
+        if (g.roundRect) g.roundRect(L, -8, 6, 17, 1.8); else g.rect(L, -8, 6, 17);
+        g.fillStyle = bo; g.fill();
+        g.lineWidth = .9; g.strokeStyle = '#5a4216'; g.stroke();
+
+        /* wooden handle */
+        var H0 = L + 6, HL = 30;
+        var hg = g.createLinearGradient(0, -7, 0, 8);
+        hg.addColorStop(0, '#b5773f'); hg.addColorStop(.5, '#8a5428'); hg.addColorStop(1, '#5a3418');
+        g.beginPath();
+        if (g.roundRect) g.roundRect(H0, -6.6, HL, 14.6, 5); else g.rect(H0, -6.6, HL, 14.6);
         g.fillStyle = hg; g.fill();
-        g.lineWidth = 0.9; g.strokeStyle = '#33200f'; g.stroke();
-        g.fillStyle = '#ead9ae';
-        g.beginPath(); g.arc(6.6, 0, 0.85, 0, TAU); g.fill();
-        g.beginPath(); g.arc(10.8, 0, 0.85, 0, TAU); g.fill();
+        g.lineWidth = 1; g.strokeStyle = '#35200e'; g.stroke();
+        /* wood grain */
+        g.strokeStyle = 'rgba(40,22,8,.35)'; g.lineWidth = .7;
+        [[-1.8, -2.6], [2.2, 1.8], [5.2, 5.6]].forEach(function(l){
+          g.beginPath(); g.moveTo(H0 + 4, l[0]); g.lineTo(H0 + HL - 3, l[1]); g.stroke();
+        });
+        /* handle top highlight */
+        g.beginPath(); g.moveTo(H0 + 4, -4.6); g.lineTo(H0 + HL - 4, -4.8);
+        g.strokeStyle = 'rgba(255,220,170,.55)'; g.lineWidth = 1.1; g.lineCap = 'round'; g.stroke();
+        g.lineCap = 'butt';
+        /* brass rivets */
+        [H0 + 6, H0 + 15, H0 + 24].forEach(function(x){
+          g.beginPath(); g.arc(x, 0.7, 1.7, 0, TAU);
+          g.fillStyle = '#f1d488'; g.fill();
+          g.lineWidth = .7; g.strokeStyle = '#5a4216'; g.stroke();
+          g.beginPath(); g.arc(x - .5, .2, .55, 0, TAU); g.fillStyle = '#fff'; g.fill();
+        });
+
         knifeCursorURL = cv2.toDataURL('image/png');
       } catch (err){ knifeCursorURL = ''; }
     })();
@@ -7636,7 +7875,7 @@ if (window.THREE){
       if (on){
         var url = KNIFE_CURSOR_URL || knifeCursorURL;
         if (url){
-          var hs = KNIFE_CURSOR_URL ? KNIFE_CURSOR_HOTSPOT : [3, 3];
+          var hs = KNIFE_CURSOR_URL ? KNIFE_CURSOR_HOTSPOT : [KNIFE_HS, KNIFE_HS];
           canvas.style.cursor = 'url("' + url + '") ' + hs[0] + ' ' + hs[1] + ', crosshair';
         } else {
           canvas.style.cursor = 'crosshair';
@@ -8863,6 +9102,9 @@ if (window.THREE){
         var slot = plateSlot(plateIdx++);
         tx = slot.x; tz = slot.z; landY = slot.y;
         yaw = g.rotation.y + shortest(u.mid - slot.a + (Math.random() - 0.5) * 0.3 - g.rotation.y);
+      } else if (Math.hypot(p.x - CK.x, p.z - CK.z) < STAND_R - 0.1){
+        landY = cakeBaseY + 0.01;
+        yaw = g.rotation.y + (Math.random() - 0.5) * 0.5;
       } else if (rr < TABLE_R - 0.35){
         landY = TABLE_TOP + 0.03;
         yaw = g.rotation.y + (Math.random() - 0.5) * 0.5;
@@ -8902,7 +9144,7 @@ if (window.THREE){
     function celebrate(){
       if (busy) return;
       busy = true; party = true;
-      bubbleMsg('HAPPY BIRTHDAY, JEETANSHI!');
+      bubbleMsg('HAPPY BIRTHDAY JEETANSHI!');
       var o = screenOrigin(CK.x, 2.6, CK.z);
       pop({ particleCount:140, spread:100, startVelocity:48, origin:o });
       pop({ particleCount:60, spread:120, startVelocity:30, scalar:0.8, decay:0.92, origin:o });
@@ -9547,16 +9789,273 @@ if (window.THREE){
     });
   }
 
-  /* ---------------- make a wish ---------------- */
-  var wishBtn = document.getElementById('wishBtn');
-  if (wishBtn){
-    wishBtn.addEventListener('click', function(){
-      pop({ particleCount:100, spread:70, startVelocity:38, origin:{ y:0.72 } });
-      wishBtn.textContent = 'Wish sent ✨';
-      setTimeout(function(){ wishBtn.textContent = 'Make a wish'; }, 2200);
-    });
+  /* ---------------- finale: dark, simple, playful ---------------- */
+  (function(){
+    var sec = document.getElementById('finale');
+    if (!sec) return;
+    var cv = document.getElementById('finaleFx');
+    var ctx = cv && cv.getContext ? cv.getContext('2d') : null;
+    var title = document.getElementById('finaleTitle');
+    var TAU = Math.PI * 2;
+
+    /* ---- the fun cursor: a glowing golden star with sparkles (this page only) ---- */
+    (function makeCursor(){
+      try{
+        var S = 48, c = document.createElement('canvas'); c.width = c.height = S;
+        var g = c.getContext('2d');
+        var glow = g.createRadialGradient(24, 24, 2, 24, 24, 23);
+        glow.addColorStop(0, 'rgba(255,217,61,.6)'); glow.addColorStop(1, 'rgba(255,92,122,0)');
+        g.fillStyle = glow; g.fillRect(0, 0, S, S);
+        g.save(); g.translate(24, 24); g.rotate(-0.22);
+        g.beginPath();
+        for (var i = 0; i < 10; i++){
+          var r = i % 2 ? 6.4 : 14.5, a = -Math.PI / 2 + i * Math.PI / 5;
+          if (i) g.lineTo(Math.cos(a) * r, Math.sin(a) * r); else g.moveTo(Math.cos(a) * r, Math.sin(a) * r);
+        }
+        g.closePath();
+        var sg = g.createLinearGradient(0, -14, 0, 14);
+        sg.addColorStop(0, '#fff3a8'); sg.addColorStop(.55, '#ffd93d'); sg.addColorStop(1, '#ffa552');
+        g.fillStyle = sg; g.fill();
+        g.lineJoin = 'round'; g.lineWidth = 1.6; g.strokeStyle = '#fffbe6'; g.stroke();
+        g.beginPath(); g.arc(-2.2, -3, 2, 0, TAU); g.fillStyle = 'rgba(255,255,255,.9)'; g.fill();   /* shine */
+        g.restore();
+        function tiny(x, y, s, col){
+          g.beginPath();
+          g.moveTo(x, y - s); g.lineTo(x + s * .26, y - s * .26); g.lineTo(x + s, y); g.lineTo(x + s * .26, y + s * .26);
+          g.lineTo(x, y + s); g.lineTo(x - s * .26, y + s * .26); g.lineTo(x - s, y); g.lineTo(x - s * .26, y - s * .26);
+          g.closePath(); g.fillStyle = col; g.fill();
+        }
+        tiny(39, 9, 5, '#ff8fb1'); tiny(8, 38, 4, '#8fd1ff'); tiny(40, 39, 3, '#ffffff');
+        sec.style.setProperty('--finale-cursor', 'url("' + c.toDataURL('image/png') + '") 24 24, auto');
+      } catch (err){}
+    })();
+
+    /* ---- split the title into hoppable letters ---- */
+    var letters = [];
+    if (title){
+      var txt = title.textContent.replace(/\s+/g, ' ').trim();
+      title.setAttribute('aria-label', txt);
+      title.textContent = '';
+      var words = txt.split(' '), n = 0;
+      words.forEach(function(w, wi){
+        var ws = document.createElement('span'); ws.className = 'word'; ws.setAttribute('aria-hidden', 'true');
+        w.split('').forEach(function(ch){
+          var l = document.createElement('span'); l.className = 'l'; l.style.setProperty('--i', n++);
+          var li = document.createElement('span'); li.className = 'li'; li.textContent = ch;
+          l.appendChild(li); ws.appendChild(l); letters.push(li);
+        });
+        title.appendChild(ws);
+        if (wi < words.length - 1) title.appendChild(document.createTextNode(' '));
+      });
+    }
+    function hop(li){
+      if (li._hop) return;
+      li._hop = true;
+      li.style.color = pick(COLORS);
+      li.classList.add('hop');
+      setTimeout(function(){ li.classList.remove('hop'); li.style.color = ''; li._hop = false; }, 640);
+    }
+
+    /* ---- canvas: twinkling stars, sparkle trail and bursts ---- */
+    var W = 0, H = 0, DPR = Math.min(window.devicePixelRatio || 1, 2);
+    var stars = [], parts = [], active = false, raf = 0, last = 0, t = 0;
+    var i0;
+    var L = { x: -999, y: -999, r: 200, a: 0 };      /* pointer light (section-local px, radius, strength 0..1) */
+    var dust = [];
+    for (i0 = 0; i0 < 560; i0++) dust.push({ x: Math.random(), y: Math.random(), r: Math.random() * .9 + .45, p: Math.random() * TAU, s: 1.2 + Math.random() * 2.6 });
+    for (i0 = 0; i0 < 90; i0++) stars.push({ x: Math.random(), y: Math.random(), r: Math.random() * 1.3 + .4, p: Math.random() * TAU, s: 1 + Math.random() * 2.2 });
+
+    function size(){
+      if (!cv) return;
+      var r = sec.getBoundingClientRect();
+      W = r.width; H = r.height;
+      cv.width = Math.max(1, Math.round(W * DPR)); cv.height = Math.max(1, Math.round(H * DPR));
+      if (!active) draw(0);
+    }
+    function sparkle(x, y, s, rot){
+      ctx.save(); ctx.translate(x, y); ctx.rotate(rot);
+      ctx.beginPath();
+      ctx.moveTo(0, -s); ctx.lineTo(s * .24, -s * .24); ctx.lineTo(s, 0); ctx.lineTo(s * .24, s * .24);
+      ctx.lineTo(0, s); ctx.lineTo(-s * .24, s * .24); ctx.lineTo(-s, 0); ctx.lineTo(-s * .24, -s * .24);
+      ctx.closePath(); ctx.fill(); ctx.restore();
+    }
+    function emit(x, y, n, burst){
+      for (var i = 0; i < n; i++){
+        if (parts.length > 320) parts.shift();
+        var a = Math.random() * TAU, sp = burst ? 80 + Math.random() * 190 : 10 + Math.random() * 34;
+        parts.push({
+          x: x, y: y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - (burst ? 40 : 0),
+          g: burst ? 260 : 90, life: 0, max: burst ? .8 + Math.random() * .6 : .65 + Math.random() * .55,
+          s: burst ? 4 + Math.random() * 5 : 2.6 + Math.random() * 3.4,
+          rot: Math.random() * 3, vr: (Math.random() - .5) * 6, c: pick(COLORS)
+        });
+      }
+    }
+    function draw(dt){
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      ctx.clearRect(0, 0, W, H);
+      var i;
+      /* twinkles */
+      var la = L.a, lr = L.r, lx = L.x, ly = L.y, lr2 = lr * lr, lit = la > .01, ex, ey, e2, kk;
+      ctx.fillStyle = '#fff';
+      for (i = 0; i < stars.length; i++){
+        var st = stars[i], sx = st.x * W, sy = st.y * H, kb = 0;
+        if (lit){                                             /* stars near the pointer glow brighter + bigger */
+          ex = sx - lx; ey = sy - ly; e2 = ex * ex + ey * ey;
+          if (e2 < lr2){ kb = 1 - Math.sqrt(e2) / lr; kb = kb * kb * la; }
+        }
+        ctx.globalAlpha = Math.min(1, .25 + .55 * (.5 + .5 * Math.sin(t * st.s + st.p)) + kb * .8);
+        ctx.beginPath(); ctx.arc(sx, sy, st.r * (1 + kb * .9), 0, TAU); ctx.fill();
+      }
+      if (lit){                                               /* hidden dust stars only show inside the light */
+        ctx.fillStyle = '#ffeccd';
+        for (i = 0; i < dust.length; i++){
+          var ds = dust[i];
+          ex = ds.x * W - lx; ey = ds.y * H - ly; e2 = ex * ex + ey * ey;
+          if (e2 >= lr2) continue;
+          kk = 1 - Math.sqrt(e2) / lr; kk = kk * kk * la;
+          ctx.globalAlpha = Math.min(1, kk * 2.2 * (.4 + .6 * (.5 + .5 * Math.sin(t * ds.s + ds.p))));
+          ctx.beginPath(); ctx.arc(ds.x * W, ds.y * H, ds.r * 1.25, 0, TAU); ctx.fill();
+        }
+      }
+      /* particles */
+      ctx.globalCompositeOperation = 'lighter';
+      for (i = parts.length - 1; i >= 0; i--){
+        var p = parts[i];
+        p.life += dt;
+        if (p.life >= p.max){ parts.splice(i, 1); continue; }
+        p.vy += p.g * dt; p.vx *= (1 - 1.4 * dt); p.x += p.vx * dt; p.y += p.vy * dt; p.rot += p.vr * dt;
+        var k = 1 - p.life / p.max;
+        ctx.globalAlpha = Math.min(1, k * 1.4);
+        ctx.fillStyle = p.c;
+        sparkle(p.x, p.y, p.s * (.5 + .5 * k), p.rot);
+      }
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.globalAlpha = 1;
+    }
+    function frame(now){
+      if (!active){ raf = 0; return; }
+      raf = requestAnimationFrame(frame);
+      var dt = Math.min(0.05, (now - last) / 1000 || 0.016);
+      last = now; t += dt;
+      draw(dt);
+    }
+    function setActive(on){
+      if (on === active) return;
+      active = on;
+      if (on && !REDUCE && !raf){ last = performance.now(); raf = requestAnimationFrame(frame); }
+    }
+
+    /* ---- pointer: sparkle trail + letters hop away from the cursor ---- */
+    var lx = -999, ly = -999, hopQueued = false, mx = 0, my = 0;
+    function local(e){ var r = sec.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
+    function hopPass(){
+      hopQueued = false;
+      for (var i = 0; i < letters.length; i++){
+        var r = letters[i].getBoundingClientRect();
+        var d = Math.hypot(mx - (r.left + r.width / 2), my - (r.top + r.height / 2));
+        if (d < Math.max(34, r.height * .7)) hop(letters[i]);
+      }
+    }
+    if (!REDUCE){
+      sec.addEventListener('pointermove', function(e){
+        var p = local(e);
+        if (Math.hypot(p.x - lx, p.y - ly) > 13){ emit(p.x, p.y, 1 + (Math.random() < .35 ? 1 : 0), false); lx = p.x; ly = p.y; }
+        mx = e.clientX; my = e.clientY;
+        if (!hopQueued){ hopQueued = true; requestAnimationFrame(hopPass); }
+      });
+      sec.addEventListener('pointerdown', function(e){
+        var p = local(e); emit(p.x, p.y, 16, true);
+      });
+    }
+
+    /* ---- pointer light: the page around the cursor lights up ----
+       - a wide soft wash over the page + brighter stars + hidden dust stars (see draw())
+       - eased follow / fade, frame-rate independent; the rAF loop sleeps once it settles
+       - stays put under a still mouse while scrolling; hides on leave / blur / hidden tab
+       - mouse & pen: on hover; touch: only while a finger is down */
+    var glow = document.getElementById('finaleGlow');
+    if (glow){
+      var cx = 0, cy = 0, px = 0, py = 0, tA = 0, tS = 1, sc = 1, gRaf = 0, gLast = 0, baseR = 200;
+      var measure = function(){ baseR = (glow.offsetWidth || 400) / 2; L.r = baseR * sc; };
+      var gRender = function(now){
+        gRaf = 0;
+        var r = sec.getBoundingClientRect();
+        if (tA && (cx < r.left || cx > r.right || cy < r.top || cy > r.bottom)) tA = 0;   /* scrolled away under a still mouse */
+        var dt = Math.min(.05, (now - gLast) / 1000 || .016); gLast = now;
+        var kp = REDUCE ? 1 : 1 - Math.exp(-dt * 16),
+            ka = REDUCE ? 1 : 1 - Math.exp(-dt * 6),
+            ks = REDUCE ? 1 : 1 - Math.exp(-dt * 10);
+        px += (cx - px) * kp; py += (cy - py) * kp;
+        L.a += (tA - L.a) * ka; sc += (tS - sc) * ks;
+        var moving = Math.abs(cx - px) > .15 || Math.abs(cy - py) > .15,
+            fading = Math.abs(tA - L.a) > .004,
+            scaling = Math.abs(tS - sc) > .003;
+        if (!moving){ px = cx; py = cy; }
+        if (!fading) L.a = tA;
+        if (!scaling) sc = tS;
+        L.x = px - r.left; L.y = py - r.top; L.r = baseR * sc;
+        glow.style.transform = 'translate3d(' + L.x.toFixed(2) + 'px,' + L.y.toFixed(2) + 'px,0) scale(' + sc.toFixed(3) + ')';
+        glow.style.opacity = L.a.toFixed(3);
+        if (ctx && !raf) draw(0);                             /* no canvas loop running (reduced motion) -> repaint once */
+        if (moving || fading || scaling) gKick();
+      };
+      var gKick = function(){ if (!gRaf) gRaf = requestAnimationFrame(gRender); };
+      var gHide = function(instant){
+        tA = 0; tS = 1;
+        if (instant === true){ L.a = 0; glow.style.opacity = '0'; if (ctx && !raf) draw(0); }
+        else gKick();
+      };
+      var gMove = function(e){
+        cx = e.clientX; cy = e.clientY;
+        if (tA === 0 && L.a < .02){ px = cx; py = cy; }      /* appear right under the pointer */
+        tA = 1; gKick();
+      };
+      measure();
+      sec.addEventListener('pointermove', gMove, { passive: true });
+      sec.addEventListener('pointerdown', function(e){ gMove(e); tS = 1.3; }, { passive: true });
+      sec.addEventListener('pointerup', function(e){ tS = 1; if (e.pointerType === 'touch') tA = 0; gKick(); }, { passive: true });
+      sec.addEventListener('pointerleave', function(){ gHide(); }, { passive: true });
+      sec.addEventListener('pointercancel', function(){ gHide(); }, { passive: true });
+      window.addEventListener('scroll', function(){ if (tA || L.a) gKick(); }, { passive: true });
+      window.addEventListener('resize', measure);
+      window.addEventListener('blur', function(){ gHide(true); });
+      document.addEventListener('visibilitychange', function(){ if (document.hidden) gHide(true); });
+    }
+
+    /* ---- lifecycle: rise-in + only animate while on screen ---- */
+    if ('IntersectionObserver' in window){
+      new IntersectionObserver(function(en){
+        en.forEach(function(x){
+          setActive(x.isIntersecting);
+          if (x.isIntersecting) sec.classList.add('in');
+        });
+      }, { threshold: 0.12 }).observe(sec);
+    } else { sec.classList.add('in'); setActive(true); }
+    window.addEventListener('resize', size);
+    size();
+  })();
+})();
+</script>
+<!-- ===== TEMP-PREVIEW START (delete this whole block when done) ===== -->
+<button id="tmpJump" type="button" style="position:fixed;left:12px;bottom:12px;z-index:99999;padding:8px 12px;font:600 12px/1 Quicksand,sans-serif;color:#150c2e;background:#ffd93d;border:2px dashed #150c2e;border-radius:10px;cursor:pointer;opacity:.92">⏩ TEMP: jump to finale</button>
+<script>
+(function(){
+  var skip = /[?&]skip=1\b/.test(location.search);
+  function scrollToFinale(){
+    document.documentElement.classList.remove('lock-scroll');
+    var f = document.getElementById('finale');
+    if (f) window.scrollTo(0, f.getBoundingClientRect().top + window.pageYOffset);
+  }
+  document.getElementById('tmpJump').addEventListener('click', function(){
+    if (skip){ scrollToFinale(); }
+    else { location.href = location.pathname + '?skip=1#finale'; }   /* reload with the story unlocked */
+  });
+  if (skip && location.hash === '#finale'){
+    window.addEventListener('load', function(){ setTimeout(scrollToFinale, 400); setTimeout(scrollToFinale, 1200); });
   }
 })();
 </script>
+<!-- ===== TEMP-PREVIEW END ===== -->
 </body>
 </html>
