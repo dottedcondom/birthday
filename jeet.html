@@ -8973,7 +8973,7 @@ if (window.THREE){
       rec.bob.add(mg); rec.g.updateMatrixWorld(true); holder.updateMatrixWorld(true);
       var headPos = new THREE.Vector3(); B.head.getWorldPosition(headPos); rec.bob.worldToLocal(headPos);
       var hh = alignedHelper(B.head, holder);
-      var mouth = new THREE.Object3D(); mouth.position.set(0, -0.035, 0.245); hh.add(mouth);
+      var mouth = new THREE.Object3D(); mouth.position.set(0, -0.035, 0.225); hh.add(mouth);
       var dNeck = makeDrive(rec.bob, B.neck, 0.5), dHead = makeDrive(rec.bob, B.head, 1);
       var dq = new THREE.Quaternion(), eu = new THREE.Euler(), tq = new THREE.Quaternion(), tq2 = new THREE.Quaternion(), tailRest = B.tail.quaternion.clone();
       rec.wagK = 0; rec.wagPh = rec.phase || 0;
