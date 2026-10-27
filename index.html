@@ -992,7 +992,7 @@
           <path d="M3 -15.5 L12 -12.5 L12 12.5 L3 15.5 Z" fill="#fff3d6" stroke-width="2.2"/>
           <path d="M4.6 -10 L10.8 -7.9 M4.6 -5 L10.8 -2.9 M4.6 0 L10.8 2.1 M4.6 5 L10.8 7.1 M4.6 10 L7.6 11" stroke="#1c1136" stroke-width="1" opacity=".5"/>
           <path d="M-10 -14 L3 -15.5 L3 15.5 L-10 14 Z" fill="#ffa552" stroke-width="2.2"/>
-          <path d="M-6 -14.5 L-6 14.5" stroke="#1c1136" stroke-width="1.3" opacity=".4"/>
+          <path d="M-6 -14.5 L-6 14.5" stroke="#1c1136" stroke-width="1.3" opacity=".4"/><text transform="translate(-1.6 0) rotate(-90)" text-anchor="middle" dominant-baseline="central" font-family="Quicksand, Fredoka, Arial, sans-serif" font-weight="700" font-size="2.7" letter-spacing=".15" fill="#1c1136" stroke="none" opacity=".34">how as confess</text>
         </g>
         <path d="M236 88 L224 106 L218 86"/>
         <circle cx="253" cy="68" r="13" fill="#1c1136" stroke-width="3.3"/>
@@ -10902,6 +10902,29 @@ if (window.THREE){
   k1.parentNode.insertBefore(k2, k1.nextSibling);
 
   var RANGE_X = 0.36, RANGE_Y = 0.40, ENTER = 11;      /* ENTER = seconds #2 takes to rise in */
+  /* cursor nudge: the cursor gives Kirby a little shove (velocity), which bends its route - it keeps drifting from the new spot
+     and only slowly rejoins its usual path.  ACCEL = shove strength, DAMP = how fast the shove dies, RETURN = how slowly it rejoins the path (smaller = slower),
+     REACH = how near the cursor must be (px, or ~0.75 x Kirby's width if bigger) */
+  var ACCEL = 150, DAMP = 1.6, RETURN = .12, REACH = 110, mx = -9999, my = -9999;
+  var n1 = { x: 0, y: 0, vx: 0, vy: 0 }, n2 = { x: 0, y: 0, vx: 0, vy: 0 };
+  window.addEventListener('pointermove', function(e){ mx = e.clientX; my = e.clientY; }, { passive: true });
+  document.documentElement.addEventListener('pointerleave', function(){ mx = my = -9999; });
+  window.addEventListener('blur', function(){ mx = my = -9999; });
+  function nudge(el, st, dt){
+    var r = el.getBoundingClientRect(), F = fin.getBoundingClientRect();
+    var cx = r.left + r.width / 2 - st.x, cy = r.top + r.height / 2 - st.y;            /* where the path itself has Kirby right now */
+    var dx = (cx + st.x) - mx, dy = (cy + st.y) - my;                                  /* from cursor to Kirby */
+    var d = Math.sqrt(dx * dx + dy * dy) || 1, R = Math.max(REACH, r.width * .75);
+    if (d < R){ var f = 1 - d / R; f = f * f * (3 - 2 * f); st.vx += dx / d * ACCEL * f * dt; st.vy += dy / d * ACCEL * f * dt; }
+    var damp = Math.exp(-dt * DAMP), rel = Math.exp(-dt * RETURN);
+    st.vx *= damp; st.vy *= damp;
+    st.x = (st.x + st.vx * dt) * rel; st.y = (st.y + st.vy * dt) * rel;                /* slowly drifts back onto the usual path */
+    var mxg = r.width / 2, myg = r.height / 2;                                         /* keep Kirby inside the finale */
+    var lo = F.left + mxg - cx, hi = F.right - mxg - cx, lo2 = F.top + myg - cy, hi2 = F.bottom - myg - cy;
+    if (st.x < lo){ st.x = lo; st.vx = 0; } else if (st.x > hi){ st.x = hi; st.vx = 0; }
+    if (st.y < lo2){ st.y = lo2; st.vy = 0; } else if (st.y > hi2){ st.y = hi2; st.vy = 0; }
+  }
+  function tilt(st){ return Math.max(-10, Math.min(10, st.vx * .05)); }
   var W = 0, H = 0, t = 0, last = 0, raf = 0;
   function size(){ W = fin.clientWidth; H = fin.clientHeight; }
   function ease(u){ u = Math.max(0, Math.min(1, u)); return 1 - Math.pow(1 - u, 3); }
@@ -10918,11 +10941,12 @@ if (window.THREE){
   function frame(now){
     raf = requestAnimationFrame(frame);
     var dt = last ? Math.min((now - last) / 1000, .1) : 0; last = now; t += dt;
+    nudge(k1, n1, dt); nudge(k2, n2, dt);
 
     /* #1 */
     var p = path1(t);
-    k1.style.transform = 'translate(' + (p.nx * RANGE_X * W).toFixed(1) + 'px,' + (p.ny * RANGE_Y * H + Math.sin(t * .9) * 4).toFixed(1) +
-      'px) rotate(' + (Math.sin(t * .35) * 6).toFixed(2) + 'deg)';
+    k1.style.transform = 'translate(' + (p.nx * RANGE_X * W + n1.x).toFixed(1) + 'px,' + (p.ny * RANGE_Y * H + Math.sin(t * .9) * 4 + n1.y).toFixed(1) +
+      'px) rotate(' + (Math.sin(t * .35) * 6 + tilt(n1)).toFixed(2) + 'deg)';
 
     /* #2: glide from just below the first screenful up onto its wandering path */
     var q = path2(t), px = q.nx * RANGE_X * W, py = q.ny * RANGE_Y * H;      /* offsets from the section centre */
@@ -10932,8 +10956,8 @@ if (window.THREE){
     sy = Math.max(sy, H / 2 + q0.ny * RANGE_Y * H + 320) - H / 2;             /* ...and always below its target */
     var s = ease(t / ENTER);
     var x = sx + (px - sx) * s, y = sy + (py - sy) * s;
-    k2.style.transform = 'translate(' + x.toFixed(1) + 'px,' + (y + Math.sin(t * .8 + 1) * 4).toFixed(1) +
-      'px) rotate(' + (Math.sin(t * .3 + 2) * 6).toFixed(2) + 'deg) scaleX(-1)';
+    k2.style.transform = 'translate(' + (x + n2.x).toFixed(1) + 'px,' + (y + Math.sin(t * .8 + 1) * 4 + n2.y).toFixed(1) +
+      'px) rotate(' + (Math.sin(t * .3 + 2) * 6 - tilt(n2)).toFixed(2) + 'deg) scaleX(-1)';
     k2.style.opacity = 'calc(var(--ko) * ' + Math.min(1, t / 2.5).toFixed(3) + ')';
   }
   function go(){ if (!raf){ last = 0; raf = requestAnimationFrame(frame); } }
