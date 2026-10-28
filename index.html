@@ -589,6 +589,7 @@
     text-wrap:balance;
   }
   .finale-title .word{ display:inline-block; white-space:nowrap; }
+  .finale-title .fem{ display:inline-block; height:.8em; width:auto; margin-left:.14em; vertical-align:-.08em; user-select:none; -webkit-user-drag:none; }   /* the emoji after the heading */
   .finale-title .l{ display:inline-block; animation:fWave 3.4s ease-in-out infinite; animation-delay:calc(var(--i) * -.16s); }
   .finale-title .li{
     display:inline-block; color:#fff;
@@ -618,6 +619,7 @@
     transition:color 1.4s ease, text-shadow 1.4s ease;
   }
   .finale-msg .mc.hit{ text-shadow:0 0 .5em currentColor; transition:none; }
+  .finale-msg .memo{ display:inline-block; height:1.35em; width:auto; margin-left:.25em; vertical-align:-.3em; user-select:none; -webkit-user-drag:none; }   /* inline emoji in the message */
 
   /* gentle rise-in when the page scrolls into view */
   .js .finale .fx-rise{
@@ -924,7 +926,7 @@
     <canvas id="beachBg" aria-hidden="true"></canvas>
     <canvas id="cakeCanvas" role="img" aria-label="Seated at the birthday table — an interactive 3D butterscotch cake. Take the beaver's knife, carve any slice, drag a slice to a friend to feed them, blow out the candles, pet the white cat, the golden retriever and the panda across the table"></canvas>
 
-    <div class="beaver-bubble" id="beaverBubble" aria-hidden="true">take my knife — cut anywhere!</div>
+    <div class="beaver-bubble" id="beaverBubble" aria-hidden="true">ye lo knife</div>
 
     <div class="cake-fallback" id="cakeFallback" hidden>
       <svg viewBox="0 0 220 170" width="180" aria-hidden="true">
@@ -8048,7 +8050,7 @@ if (window.THREE){
       for (var i = 0; i < animals.length; i++){
         (function(a, idx){ setTimeout(function(){ animalPop(a); }, 380 + idx * 230); })(animals[i], i);
       }
-      setTimeout(function(){ bubbleMsg('they were waiting ALL day to do that'); },
+      setTimeout(function(){ bubbleMsg('ye sab PURE DIN se iska wait kar rahe the'); },
                  380 + animals.length * 230 + 320);
     }
 
@@ -8196,7 +8198,7 @@ if (window.THREE){
         .to(beaverG.scale, { x: s * 1.14, y: s * 0.76, z: s * 1.14, duration: 0.10, ease: 'power2.out' })
         .to(beaverG.scale, { x: s, y: s, z: s, duration: 0.7, ease: 'elastic.out(1, 0.38)' });
       G.delayedCall(0.74, function(){
-        bubbleMsg('special delivery!! one butterscotch cake, for Jeetanshi!');
+        bubbleMsg('special delivery!! ek butterscotch cake Jeetanshi ke liyeee');
       });
     }
 
@@ -8333,7 +8335,7 @@ if (window.THREE){
         d.light.intensity = 0;
         smokeAt(d.flame);
         if (allCandlesOut()){
-          bubbleMsg('all candles out!! close your eyes — wish!');
+          bubbleMsg('HAPPY BADDAY TO YOU');
           animals.forEach(function(a){ petHop(a); });
           pop({ particleCount: 50, spread: 80, startVelocity: 34, scalar: 0.8,
                 origin: screenOrigin(CK.x, cakeTop + 0.6, CK.z) });
@@ -8433,22 +8435,22 @@ if (window.THREE){
       }
     }
 
-    var IDLE_NO_KNIFE = ['tap me — the knife is yours!','I am just holding it. for you. to take.',
-      'you have the best seat at this table','the guests are waiting for the first cut'];
-    var IDLE_KNIFE    = ['drag anywhere to carve · tap for a slice','drag a slice to a friend to share!!',
-      'tap a slice to take a bite','tap a candle to blow it out!','two fingers — or a right-drag — spins the cake'];
-    var CLAIM_MSGS  = ['it is VERY sharp!! be careful','my precious knife… use it wisely','go on — cut anywhere you like!'];
-    var RETURN_MSGS = ['my knife!! I missed it','I will keep it safe. come back anytime','back in professional paws'];
-    var CUT_MSGS    = ['a perfect cut!','yum!! butterscotch is the correct choice','careful — that one is the good part','you take the bigger piece'];
-    var MISS_MSGS   = ['nothing to cut there!','I cannot cut air. I have tried','the cake is the round thing, I promise'];
-    var EAT_MSGS    = ['gnom gnom','hey!! I was saving that one','quality control. very important','you have excellent taste. literally'];
-    var BLOW_MSGS   = ['phoot!!','one down…','smoke means progress'];
-    var RELIGHT_MSGS = ['oh!! it is back','magic candle!','that one refuses to stay out'];
+    var IDLE_NO_KNIFE = ['mujhe click karke chaaku lelo','kitna wait karvati ho jaldi lo na',
+      'scene kaisa lagg raha hai?','sab wait kar rahe hai cake ke liye'];
+    var IDLE_KNIFE    = ['left click karke drag karo to cut a slice','slice ko drag karke share bhi kar sakti ho, unke muh se paas le jaake',
+      'slice pe tap karke bite loooo','candle pe tap karke bujhao','do ungliyo se — ya right-drag se — cake ghoomega'];
+    var CLAIM_MSGS  = ['is it sharp? ek baar neck pe slide karke dekho','mera knife hai dhankse use karna','kaato ab'];
+    var RETURN_MSGS = ['mera knife!! bohot miss kiya isse','main safe rakhunga. jab man kare wapas aajana','wapas professional paws mein'];
+    var CUT_MSGS    = ['ye to mujhe milna chahiye','mera fabrate butterscotch','dhyaan se — wo wala sabse acha part hai','aap bada wala piece lelo'];
+    var MISS_MSGS   = ['vaha kuch nhi kaatne ko','hava kaat rahi ho kya','cake beech mein rakha hai btw'];
+    var EAT_MSGS    = ['nom nom','AYE VO MERA THA','quality control. bohot important hai','aapka taste ekdum best hai. literally'];
+    var BLOW_MSGS   = ['phooooooooooo','ek gayi…','tenew tenew'];
+    var RELIGHT_MSGS = ['oh.. ye to vapas..','jaaduu','aapse ek candle bhi nhi bujh rahi'];
     var FEED_MSGS = {
-      cat:   ['mrrrp!! delicious','the white cat approves. finally','she deigns to accept this'],
-      dog:   ['om nom nom!! MORE??','the golden retriever is living his best life','he was STARVING. since breakfast'],
-      panda: ['crunch!! wait. this is not bamboo','the panda makes an exception for butterscotch','verdict: better than bamboo'],
-      beaver:['for ME?? a slice??','quality control: passed','I will guard the rest. by eating it']
+      cat:   ['mrrrp!! yummmy','noniji approves it','jaldi khilao usse fir sona bhi hai'],
+      dog:   ['om nom nom!! AUR??','i think he likes it','vo 2 dino se bhukha tha'],
+      panda: ['usse bamboo chahiye','panda(real wala) se cake thoda durr hi rakhna','ye to bamboo se bhi accha laga'],
+      beaver:['MERE LIYE?? EK SLICE??','ITS YUMMY','baaki ka mai sambhal lunga aap tension matt lo']
     };
 
     function bubbleMsg(txt){
@@ -8459,8 +8461,8 @@ if (window.THREE){
       bubbleEl.classList.add('pop');
     }
     function eatMsg(){
-      if (eatenCount === 7) return 'seven slices!! someone really loves butterscotch';
-      if (eatenCount > 0 && eatenCount % 10 === 0) return eatenCount + ' slices eaten. no judgement';
+      if (eatenCount === 7) return 'saat slices!! kisi ko butterscotch se bohot pyaar hai khaoodiii';
+      if (eatenCount > 0 && eatenCount % 10 === 0) return eatenCount + ' SLICES KHA LIYE AUR KITNA KHAOOGI';
       return pick(EAT_MSGS);
     }
 
@@ -8562,7 +8564,7 @@ if (window.THREE){
     }
 
     var NOM_WORDS = ['nom!', 'chomp', 'crunch', 'mmm', 'yum!', 'nom nom'];
-    var NOM_MSGS  = ['nom', 'more!', 'one bite is never enough', 'the crust is the best part', 'again. for science'];
+    var NOM_MSGS  = ['nom', 'MORE MORE MORE', 'ek bite se kaha kuch hota hai', 'crust is my favourite', 'dhankse swaad nhi aaya ek aur dena'];
     function floatWord(txt, p){
       if (REDUCE || !stage) return;
       _p.copy(p).project(camera);
@@ -9549,16 +9551,16 @@ if (window.THREE){
     }
 
     var HOVER_MSGS = {
-      cat:   ['open wide, your majesty', 'she is pretending not to want it'],
-      dog:   ['he is VIBRATING', 'the golden retriever has never wanted anything more'],
-      panda: ['the panda has been waiting all evening', 'panda.exe is loading… cake'],
-      beaver:['for ME?? oh no. do not tempt me']
+      cat:   ['noniji muh kholo', 'wo aise dikha rahi hai jaise chahiye hi nahi'],
+      dog:   ['ye to VIBRATE kar raha hai', 'ye gym kab se jaane lagg gya'],
+      panda: ['panda poori shaam se wait kar raha hai', 'aaaaaaaaaaaaaaa'],
+      beaver:['BAS DIKHATI RAHOGI KYA KHILAO BHI']
     };
     var lastHoverMsg = -99, hintShown = false;
     function onHoverTarget(t){
       var now = performance.now() / 1000;
-      if (t.rig && t.rig.busy){ if (now - lastHoverMsg > 2) { lastHoverMsg = now; bubbleMsg('mouth full!! give me a second'); } return; }
-      if (now - lastHoverMsg > 3.5){ lastHoverMsg = now; bubbleMsg(pick(HOVER_MSGS[t.kind] || ['let go to feed!'])); }
+      if (t.rig && t.rig.busy){ if (now - lastHoverMsg > 2) { lastHoverMsg = now; bubbleMsg('pura muh bhara hai RUKO'); } return; }
+      if (now - lastHoverMsg > 3.5){ lastHoverMsg = now; bubbleMsg(pick(HOVER_MSGS[t.kind] || ['KYA HAI'])); }
     }
 
     /* fallback (no GSAP / reduced motion): the classic quick gulp */
@@ -9643,7 +9645,7 @@ if (window.THREE){
       tl.call(function(){ reactFed(a); }, null, 2.35);
       tl.call(function(){ rg.busy = false; rg.target = null; }, null, 3.9);
       if (fedCount === 5){
-        setTimeout(function(){ bubbleMsg('careful — they will expect cake at every birthday now'); }, 4200);
+        setTimeout(function(){ bubbleMsg('ab hame har birthdya par cake chahiye'); }, 4200);
       }
     }
 
@@ -9655,7 +9657,7 @@ if (window.THREE){
       heartsAt(p);
       burstSparks(p);
       crumbBurst(p, 6, 0.7, 1.6);
-      bubbleMsg(rg.fed === 4 ? 'the ' + (kind === 'dog' ? 'golden retriever' : kind) + ' is STUFFED. still smiling' : pick(FEED_MSGS[kind]));
+      bubbleMsg(rg.fed === 4 ? (kind === 'dog' ? 'golden retriever' : kind) + ' ko aur chahiye' : pick(FEED_MSGS[kind]));
       floatWord(pick(kind === 'cat' ? ['mrrrp', 'purr…'] : kind === 'dog' ? ['woof!', 'yum!!'] : kind === 'panda' ? ['mmm', 'crunch'] : ['yes!', 'mmm']), p);
       buzz(28);
       addDabs(a, kind === 'cat' ? 1.5 : 2.8);
@@ -9696,7 +9698,7 @@ if (window.THREE){
     }
 
     function refuseFeed(a, g){
-      bubbleMsg(pick(['mid-bite!! one at a time', 'still chewing. one second', 'my mouth is full. of cake']));
+      bubbleMsg(pick(['pehle ka to khane do', 'slow eater i am ek sec', 'mera mooh full hai. cake se']));
       buzz(24);
       dropSlice(g, true);
     }
@@ -9727,7 +9729,7 @@ if (window.THREE){
       } else {
         landY = FLOOR_Y + 0.04;
         yaw = g.rotation.y + (Math.random() - 0.5) * 0.8;
-        setTimeout(function(){ bubbleMsg('a slice for the floor!! the five-second rule applies'); }, 600);
+        setTimeout(function(){ bubbleMsg('omg niche gira diya'); }, 600);
       }
       var s = CARRY_S;
       var tl = G.timeline();
@@ -9760,7 +9762,7 @@ if (window.THREE){
     function celebrate(){
       if (busy) return;
       busy = true; party = true;
-      bubbleMsg('HAPPY BIRTHDAY JEETANSHI!');
+      bubbleMsg('HAPPY BIRTHDAY JEETANSHIIIII!');
       var o = screenOrigin(CK.x, 2.6, CK.z);
       pop({ particleCount:140, spread:100, startVelocity:48, origin:o });
       pop({ particleCount:60, spread:120, startVelocity:30, scalar:0.8, decay:0.92, origin:o });
@@ -9799,7 +9801,7 @@ if (window.THREE){
         G.to(remainderGroup.scale, { x:1, y:1, z:1, duration:0.9, ease:'back.out(1.5)',
           onComplete:function(){ busy = false; } });
       } else busy = false;
-      bubbleMsg('more cake? always.');
+      bubbleMsg('aur cake? hamesha.');
     }
 
     function playIntro(){
@@ -10079,7 +10081,7 @@ if (window.THREE){
         if (drag.dist > 10 && !drag.dragging){
           drag.dragging = true;
           beginCarry(drag.slice);
-          if (!hintShown){ hintShown = true; bubbleMsg('bring it close to a mouth — then let go!'); }
+          if (!hintShown){ hintShown = true; bubbleMsg('mooh ke paas le jao fir chhod do!'); }
         }
         if (drag.dragging && setNDC(e)){
           ray.setFromCamera(ndc, camera);
@@ -10134,7 +10136,7 @@ if (window.THREE){
         setKnifeCursor(knifeHeld);
         spinVel = (cancelled || REDUCE) ? 0 : clamp(d.vel, -7, 7);
         if (!cancelled && !knifeHeld && introDone && d.hit && d.hit.onCake && d.dist < 10 && !busy){
-          bubbleMsg('take my knife first — tap me!');
+          bubbleMsg('bina cut kare hi khana hai kya? click on me and take knife');
           beaverHop(0.2);
         }
         return;
@@ -10303,7 +10305,7 @@ if (window.THREE){
         spinVel *= Math.exp(-2.4 * dt);
         if (Math.abs(spinVel) < 0.02) spinVel = 0;
         if (introDone && Math.abs(spinVel) > 2.6 && t - wheeAt > 5){
-          wheeAt = t; bubbleMsg('wheee!!');
+          wheeAt = t; bubbleMsg('OOYE HOOYEE');
         }
       }
       if (remainderGroup) remainderGroup.rotation.y = cakeYaw;
@@ -10479,6 +10481,12 @@ if (window.THREE){
           var li = document.createElement('span'); li.className = 'li'; li.textContent = ch;
           l.appendChild(li); ws.appendChild(l); letters.push(li);
         });
+        if (wi === words.length - 1){                      /* emoji sits right after the last word, waving with the letters */
+          var el = document.createElement('span'); el.className = 'l'; el.style.setProperty('--i', n++);
+          var em = document.createElement('img'); em.className = 'fem'; em.alt = ''; em.decoding = 'async';
+          em.src = 'https://cdn.discordapp.com/emojis/862034033034526720.gif?size=96';
+          el.appendChild(em); ws.appendChild(el);
+        }
         title.appendChild(ws);
         if (wi < words.length - 1) title.appendChild(document.createTextNode(' '));
       });
@@ -10697,6 +10705,21 @@ if (window.THREE){
           ws.appendChild(c);
           chars.push(c);
         });
+        if (word === 'mettttt' && txt.indexOf('againnn happy birthdayyy') === 0){      /* emoji right after "...person i have ever mettttt" */
+          var em = document.createElement('img'); em.className = 'memo'; em.alt = ''; em.decoding = 'async';
+          em.src = 'https://cdn.discordapp.com/emojis/779485047828512798.gif?size=96';
+          ws.appendChild(em);
+        }
+        if (word === 'WAIT' && txt.indexOf('ITS YOU FOR WHOM ILL HAVE TO WAIT') !== -1){      /* emoji right after "...ITS YOU FOR WHOM ILL HAVE TO WAIT" */
+          var em2 = document.createElement('img'); em2.className = 'memo'; em2.alt = ''; em2.decoding = 'async';
+          em2.src = 'https://cdn.discordapp.com/emojis/393566355615645696.gif?size=96';
+          ws.appendChild(em2);
+        }
+        if (word === 'that.' && arr[wi - 1] === 'for' && arr[wi - 2] === 'gussa'){      /* emoji right after "...next time ill be gussa for that." */
+          var em3 = document.createElement('img'); em3.className = 'memo'; em3.alt = ''; em3.decoding = 'async';
+          em3.src = 'https://cdn.discordapp.com/emojis/664504618419486720.webp?size=96';
+          ws.appendChild(em3);
+        }
         lineEl.appendChild(ws);
         if (wi < arr.length - 1) lineEl.appendChild(document.createTextNode(' '));
       });
